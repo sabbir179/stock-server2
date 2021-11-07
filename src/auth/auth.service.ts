@@ -1,4 +1,9 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  HttpException,
+  HttpStatus,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { User } from '../users/schemas/user.schema';
 import { UsersService } from '../users/users.service';
@@ -18,6 +23,9 @@ export class AuthService {
     const { email, password } = authLoginDto;
 
     const user = await this.usersService.findByEmail(email);
+    if (!user) {
+      throw new HttpException('account does not exist', HttpStatus.NOT_FOUND);
+    }
     const valid = await bcrypt.compare(password, user.password);
     if (!valid) {
       throw new UnauthorizedException();
