@@ -4,8 +4,9 @@ import { InjectModel } from '@nestjs/mongoose';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User, UserDocument } from './schemas/user.schema';
-import { UserRole } from '../common/enum';
+import { SubscriptionType } from '../common/enum';
 import * as bcrypt from 'bcrypt';
+import { UpdateStatusDto } from './dto/update-status.dto';
 
 @Injectable()
 export class UsersService {
@@ -17,35 +18,43 @@ export class UsersService {
     if (user) {
       throw new HttpException('user already exists', HttpStatus.BAD_REQUEST);
     }
-    const createdUser = new this.userModel({
-      ...createUserDto,
-      role: UserRole.TRADER,
-    });
+    const currentDate = new Date();
+    const subscription = {
+      type: SubscriptionType.FREE,
+      expiryDate: new Date(currentDate.setMonth(currentDate.getMonth() + 1)),
+    };
+    const createdUser = new this.userModel({ ...createUserDto, subscription });
     const hashed = await bcrypt.hash(password, 10);
     createdUser.password = hashed;
     await createdUser.save();
 
-    return this.sanitize(createdUser);
+    return {
+      ok: true,
+      message: 'Created user successfully',
+    };
   }
 
-  async sanitize(user: User) {
-    delete user.password;
-    return user;
+  updateStatus(id: string, updateStatusDto: UpdateStatusDto) {
+    const updatedUser = this.userModel
+      .findByIdAndUpdate(id, updateStatusDto)
+      .setOptions({ new: true })
+      .select('-password');
+    return updatedUser;
   }
 
   findAll() {
     return this.userModel.find().select('-password').exec();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} user`;
+  findOne(id: string) {
+    return this.userModel.findById(id).select('-password').exec();
   }
 
   findByEmail(email: string) {
     return this.userModel.findOne({ email });
   }
 
-  update(id: number, updateUserDto: UpdateUserDto) {
+  update(id: string, updateUserDto: UpdateUserDto) {
     return `This action updates a #${id} user`;
   }
 

@@ -9,3 +9,14 @@ export enum SubscriptionType {
   FREE = 'FREE',
   FREE_REFERRAL = 'FREE_REFERRAL',
 }
+
+export enum UserStatus {
+  PENDING = 'PENDING',
+  ACTIVE = 'ACTIVE',
+  INACTIVE = 'INACTIVE',
+}
+
+export enum JoinMode {
+  DIRECT = 'DIRECT',
+  REFERRAL = 'REFERRAL',
+}
