@@ -4,9 +4,10 @@ import { InjectModel } from '@nestjs/mongoose';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User, UserDocument } from './schemas/user.schema';
-import { SubscriptionType } from '../common/enum';
+import { SubscriptionType, UserRole, UserStatus } from '../common/enum';
 import * as bcrypt from 'bcrypt';
 import { UpdateStatusDto } from './dto/update-status.dto';
+import { CreateAdminDto } from './dto/create-admin.dto';
 
 @Injectable()
 export class UsersService {
@@ -31,6 +32,30 @@ export class UsersService {
     return {
       ok: true,
       message: 'Created user successfully',
+    };
+  }
+
+  async createAdmin(createAdminDto: CreateAdminDto, key: string) {
+    const { email, password } = createAdminDto;
+    if (key !== process.env.ADMIN_CREATION_KEY) {
+      throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
+    }
+    const user = await this.findByEmail(email);
+    if (user) {
+      throw new HttpException('user already exists', HttpStatus.BAD_REQUEST);
+    }
+    const createdAdmin = new this.userModel({
+      ...createAdminDto,
+      status: UserStatus.ACTIVE,
+      role: UserRole.ADMIN,
+    });
+    const hashed = await bcrypt.hash(password, 10);
+    createdAdmin.password = hashed;
+    await createdAdmin.save();
+
+    return {
+      ok: true,
+      message: 'Created admin successfully',
     };
   }
 

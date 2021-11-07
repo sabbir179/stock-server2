@@ -1,4 +1,5 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Post, Request } from '@nestjs/common';
+import { CreateAdminDto } from '../users/dto/create-admin.dto';
 import { AuthService } from './auth.service';
 import { LoginDto } from './dto/login.dto';
 import { RegisterDto } from './dto/register.dto';
@@ -15,5 +16,11 @@ export class AuthController {
   @Post('/register')
   register(@Body() registerDto: RegisterDto) {
     return this.authService.register(registerDto);
+  }
+
+  @Post('/create-admin')
+  createAdmin(@Body() createAdminDto: CreateAdminDto, @Request() req) {
+    const { headers } = req;
+    return this.authService.createAdmin(createAdminDto, headers['x-key']);
   }
 }

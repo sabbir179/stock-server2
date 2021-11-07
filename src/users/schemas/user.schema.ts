@@ -23,6 +23,9 @@ export class User {
   @Prop({ required: true })
   password: string;
 
+  @Prop()
+  phone: string;
+
   @Prop({
     enum: Object.values(UserStatus),
     default: UserStatus.PENDING,
@@ -41,7 +44,7 @@ export class User {
   })
   joinMode: JoinMode;
 
-  @Prop({ type: SubscriptionSchema, required: true })
+  @Prop({ type: SubscriptionSchema })
   @Type(() => Subscription)
   subscription: Subscription;
 }

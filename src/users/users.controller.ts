@@ -7,6 +7,7 @@ import {
   Param,
   Delete,
   UseGuards,
+  Request,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -16,6 +17,7 @@ import { UpdateStatusDto } from './dto/update-status.dto';
 import { Roles } from '../common/decorators/roles.decorator';
 import { UserRole } from '../common/enum';
 import { RolesGuard } from '../common/guards/roles.guard';
+import { CreateAdminDto } from './dto/create-admin.dto';
 
 @UseGuards(JwtAuthGuard, RolesGuard)
 @Controller('users')
@@ -32,6 +34,12 @@ export class UsersController {
   @Roles(UserRole.ADMIN, UserRole.TRADER)
   findAll() {
     return this.usersService.findAll();
+  }
+
+  @Get('/me')
+  me(@Request() req) {
+    const { userId } = req.user;
+    return this.usersService.findOne(userId);
   }
 
   @Get(':id')

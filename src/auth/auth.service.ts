@@ -5,6 +5,7 @@ import { UsersService } from '../users/users.service';
 import { LoginDto } from './dto/login.dto';
 import * as bcrypt from 'bcrypt';
 import { RegisterDto } from './dto/register.dto';
+import { CreateAdminDto } from '../users/dto/create-admin.dto';
 
 @Injectable()
 export class AuthService {
@@ -34,5 +35,9 @@ export class AuthService {
 
   async register(registerDto: RegisterDto) {
     return this.usersService.create(registerDto);
+  }
+
+  async createAdmin(createAdminDto: CreateAdminDto, key: string) {
+    return this.usersService.createAdmin(createAdminDto, key);
   }
 }
