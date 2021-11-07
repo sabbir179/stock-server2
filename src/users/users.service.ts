@@ -8,6 +8,8 @@ import { SubscriptionType, UserRole, UserStatus } from '../common/enum';
 import * as bcrypt from 'bcrypt';
 import { UpdateStatusDto } from './dto/update-status.dto';
 import { CreateAdminDto } from './dto/create-admin.dto';
+import { QueryParamsDto } from './dto/query-parmas.dto';
+import { query } from 'express';
 
 @Injectable()
 export class UsersService {
@@ -67,8 +69,16 @@ export class UsersService {
     return updatedUser;
   }
 
-  findAll() {
-    return this.userModel.find().select('-password').exec();
+  findAll(queryParamsDto: QueryParamsDto) {
+    let query = this.userModel.find();
+    const { status, role } = queryParamsDto;
+    if (status) {
+      query = query.where('status').equals(status);
+    }
+    if (role) {
+      query = query.where('role').equals(role);
+    }
+    return query.select('-password').sort('-createdAt').exec();
   }
 
   findOne(id: string) {
