@@ -19,15 +19,17 @@ export class StocksService {
     return this.stockModel.find().exec();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} stock`;
+  findOne(id: string) {
+    return this.stockModel.findById(id).exec();
   }
 
-  update(id: number, updateStockDto: UpdateStockDto) {
-    return `This action updates a #${id} stock`;
+  update(id: string, updateStockDto: UpdateStockDto) {
+    return this.stockModel
+      .findByIdAndUpdate(id, updateStockDto)
+      .setOptions({ new: true });
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} stock`;
+  remove(id: string) {
+    return this.stockModel.findOneAndDelete({ _id: id });
   }
 }
