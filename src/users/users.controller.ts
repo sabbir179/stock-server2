@@ -18,7 +18,7 @@ import { UpdateStatusDto } from './dto/update-status.dto';
 import { Roles } from '../common/decorators/roles.decorator';
 import { UserRole } from '../common/enum';
 import { RolesGuard } from '../common/guards/roles.guard';
-import { QueryParamsDto } from './dto/query-parmas.dto';
+import { UserQueryParamsDto } from './dto/query-parmas.dto';
 
 @UseGuards(JwtAuthGuard, RolesGuard)
 @Controller('users')
@@ -33,13 +33,13 @@ export class UsersController {
 
   @Get()
   @Roles(UserRole.ADMIN)
-  findAll(@Query() queryParams: QueryParamsDto) {
+  findAll(@Query() queryParams: UserQueryParamsDto) {
     return this.usersService.findAll(queryParams);
   }
 
   @Get('/traders')
   @Roles(UserRole.ADMIN)
-  findAllTraders(@Query() queryParams: QueryParamsDto) {
+  findAllTraders(@Query() queryParams: UserQueryParamsDto) {
     queryParams.role = UserRole.TRADER;
     return this.usersService.findAll(queryParams);
   }

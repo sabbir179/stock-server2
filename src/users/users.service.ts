@@ -8,8 +8,7 @@ import { SubscriptionType, UserRole, UserStatus } from '../common/enum';
 import * as bcrypt from 'bcrypt';
 import { UpdateStatusDto } from './dto/update-status.dto';
 import { CreateAdminDto } from './dto/create-admin.dto';
-import { QueryParamsDto } from './dto/query-parmas.dto';
-import { query } from 'express';
+import { UserQueryParamsDto } from './dto/query-parmas.dto';
 
 @Injectable()
 export class UsersService {
@@ -69,16 +68,28 @@ export class UsersService {
     return updatedUser;
   }
 
-  findAll(queryParamsDto: QueryParamsDto) {
-    let query = this.userModel.find();
-    const { status, role } = queryParamsDto;
+  async findAll(queryParamsDto: UserQueryParamsDto) {
+    const { status, role, page, limit } = queryParamsDto;
+    const filters = {} as any;
     if (status) {
-      query = query.where('status').equals(status);
+      filters.status = status;
     }
     if (role) {
-      query = query.where('role').equals(role);
+      filters.role = role;
     }
-    return query.select('-password').sort('-createdAt').exec();
+
+    const count = await this.userModel.count(filters);
+    const results = await this.userModel
+      .find(filters)
+      .skip((page - 1) * limit)
+      .limit(limit)
+      .sort('-createdAt')
+      .select('-password');
+
+    return {
+      data: results,
+      meta: { totalPage: Math.ceil(count / limit), currentPage: page },
+    };
   }
 
   findOne(id: string) {
