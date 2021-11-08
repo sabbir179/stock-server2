@@ -1,0 +1,50 @@
+version: '3.9'
+services:
+  dev:
+    container_name: server-dev
+    image: server-dev:1.0.0
+    depends_on:
+      - mongodb
+    links:
+      - mongodb
+    build:
+      context: .
+      target: development
+      dockerfile: ./Dockerfile
+    command: npm run start:dev
+    ports:
+      - ${PORT}:${PORT}
+      - 9229:9229
+    networks:
+      - server-network
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    restart: unless-stopped
+    environment:
+      DSN: mongodb://server-mongodb
+      PORT: ${PORT}
+      JWT_SECRET: ${JWT_SECRET}
+      ADMIN_CREATION_KEY: ${ADMIN_CREATION_KEY}
+    env_file:
+      - .env
+  mongodb:
+    image: mongo
+    container_name: server-mongodb
+    volumes:
+      - mongodb-data:/data/db
+    networks:
+      - server-network
+    ports:
+      - 27017:27017
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongo localhost:27017/test --quiet
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    restart: unless-stopped
+volumes:
+  mongodb-data:
+    name: mongodb-data
+networks:
+  server-network:
