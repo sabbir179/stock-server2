@@ -5,7 +5,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User, UserDocument } from './schemas/user.schema';
 import { SubscriptionType, UserRole, UserStatus } from '../common/enum';
-import * as bcrypt from 'bcrypt';
+import * as bcrypt from 'bcryptjs';
 import { UpdateStatusDto } from './dto/update-status.dto';
 import { CreateAdminDto } from './dto/create-admin.dto';
 import { UserQueryParamsDto } from './dto/query-parmas.dto';
