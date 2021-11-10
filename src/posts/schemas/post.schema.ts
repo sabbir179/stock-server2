@@ -4,6 +4,7 @@ import { Document, ObjectId } from 'mongoose';
 import * as mongoose from 'mongoose';
 import { User } from '../../users/schemas/user.schema';
 import { Comment } from './comment.schema';
+import { SubscriptionType } from '../../common/enum';
 
 export type PostDocument = Post & Document;
 
@@ -18,8 +19,8 @@ export class Post {
   @Prop()
   description: string;
 
-  @Prop()
-  tags: string[];
+  @Prop([{ type: String, enum: Object.values(SubscriptionType) }])
+  tags: SubscriptionType[];
 
   @Prop({ type: mongoose.Schema.Types.ObjectId, ref: User.name })
   @Type(() => User)

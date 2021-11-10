@@ -1,15 +1,36 @@
 import { Injectable } from '@nestjs/common';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
+import { UsersService } from '../users/users.service';
+import { UserRole } from '../common/enum';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
+import { Post, PostDocument } from './schemas/post.schema';
 
 @Injectable()
 export class PostsService {
-  create(createPostDto: CreatePostDto) {
-    return 'This action adds a new post';
+  constructor(
+    @InjectModel(Post.name) private postModel: Model<PostDocument>,
+    private usersService: UsersService,
+  ) {}
+
+  create(uid: string, createPostDto: CreatePostDto) {
+    const newPost = new this.postModel({ ...createPostDto, author: uid });
+    return newPost.save();
   }
 
-  findAll() {
-    return `This action returns all posts`;
+  async findAll(uid: string, role: UserRole) {
+    const query = {} as any;
+
+    if (role === UserRole.TRADER) {
+      const user = await this.usersService.findOne(uid);
+      const userSubscription = user.subscription.type;
+      query.tags = userSubscription;
+    }
+    return this.postModel
+      .find(query)
+      .populate('comments')
+      .sort({ createdAt: -1 });
   }
 
   findOne(id: number) {
