@@ -17,8 +17,9 @@ import { RolesGuard } from '../common/guards/roles.guard';
 import { Roles } from '../common/decorators/roles.decorator';
 import { UserRole } from '../common/enum';
 import { StockQueryParamsDto } from './dto/stock-query-params.dto';
+import { IsUserActivated } from '../common/guards/activated-user.guard';
 
-@UseGuards(JwtAuthGuard, RolesGuard)
+@UseGuards(JwtAuthGuard, IsUserActivated, RolesGuard)
 @Controller('stocks')
 export class StocksController {
   constructor(private readonly stocksService: StocksService) {}

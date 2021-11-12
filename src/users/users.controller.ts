@@ -46,8 +46,8 @@ export class UsersController {
 
   @Get('/me')
   me(@Request() req) {
-    const { userId } = req.user;
-    return this.usersService.findOne(userId);
+    const { uid } = req.user;
+    return this.usersService.findOne(uid);
   }
 
   @Get(':id')

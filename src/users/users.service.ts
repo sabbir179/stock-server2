@@ -92,8 +92,12 @@ export class UsersService {
     };
   }
 
-  findOne(id: string) {
-    return this.userModel.findById(id).select('-password').exec();
+  async findOne(id: string) {
+    const user = await this.userModel.findById(id).select('-password');
+    if (!user) {
+      throw new HttpException('user does not exist.', HttpStatus.NOT_FOUND);
+    }
+    return user;
   }
 
   findByEmail(email: string) {

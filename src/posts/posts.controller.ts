@@ -18,8 +18,9 @@ import { Roles } from '../common/decorators/roles.decorator';
 import { UserRole } from 'src/common/enum';
 import { CreateCommentDto } from './dto/create-comment.dto';
 import { CommentsService } from './comments.service';
+import { IsUserActivated } from '../common/guards/activated-user.guard';
 
-@UseGuards(JwtAuthGuard, RolesGuard)
+@UseGuards(JwtAuthGuard, IsUserActivated, RolesGuard)
 @Controller('posts')
 export class PostsController {
   constructor(
@@ -30,8 +31,8 @@ export class PostsController {
   @Post()
   @Roles(UserRole.ADMIN)
   create(@Request() req, @Body() createPostDto: CreatePostDto) {
-    const { userId } = req.user;
-    return this.postsService.create(userId, createPostDto);
+    const { uid } = req.user;
+    return this.postsService.create(uid, createPostDto);
   }
 
   @Post(':id/comments')
@@ -40,14 +41,14 @@ export class PostsController {
     @Param('id') id: string,
     @Body() createCommentDto: CreateCommentDto,
   ) {
-    const { userId } = req.user;
-    return this.commentsService.create(id, userId, createCommentDto);
+    const { uid } = req.user;
+    return this.commentsService.create(id, uid, createCommentDto);
   }
 
   @Get()
   findAll(@Request() req) {
-    const { userId, role } = req.user;
-    return this.postsService.findAll(userId, role);
+    const { uid, role } = req.user;
+    return this.postsService.findAll(uid, role);
   }
 
   @Get(':id')

@@ -34,10 +34,15 @@ export class AuthService {
     return user;
   }
 
+  async me(uid: string): Promise<User> {
+    const user = await this.usersService.findOne(uid);
+    return user;
+  }
+
   async login(loginDto: LoginDto): Promise<IToken> {
     const user = await this.validateUser(loginDto);
     return {
-      token: this.jwtService.sign({ userId: user._id, role: user.role }),
+      token: this.jwtService.sign({ userId: user._id }),
     };
   }
 
