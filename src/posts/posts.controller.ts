@@ -19,7 +19,10 @@ import { UserRole } from 'src/common/enum';
 import { CreateCommentDto } from './dto/create-comment.dto';
 import { CommentsService } from './comments.service';
 import { IsUserActivated } from '../common/guards/activated-user.guard';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
+@ApiBearerAuth()
+@ApiTags('Posts')
 @UseGuards(JwtAuthGuard, IsUserActivated, RolesGuard)
 @Controller('posts')
 export class PostsController {

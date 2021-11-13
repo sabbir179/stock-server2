@@ -19,7 +19,10 @@ import { Roles } from '../common/decorators/roles.decorator';
 import { UserRole } from '../common/enum';
 import { RolesGuard } from '../common/guards/roles.guard';
 import { UserQueryParamsDto } from './dto/query-parmas.dto';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
+@ApiBearerAuth()
+@ApiTags('Users')
 @UseGuards(JwtAuthGuard, RolesGuard)
 @Controller('users')
 export class UsersController {
