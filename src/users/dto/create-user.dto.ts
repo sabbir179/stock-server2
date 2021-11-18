@@ -1,4 +1,12 @@
-import { IsEmail, IsPhoneNumber, IsString, MinLength } from 'class-validator';
+import {
+  IsEmail,
+  IsEnum,
+  IsOptional,
+  IsPhoneNumber,
+  IsString,
+  MinLength,
+} from 'class-validator';
+import { JoinMode } from '../../common/enum';
 
 export class CreateUserDto {
   @IsEmail()
@@ -16,4 +24,12 @@ export class CreateUserDto {
 
   @IsString()
   lastName: string;
+
+  @IsOptional()
+  @IsString()
+  referral?: string;
+
+  @IsOptional()
+  @IsEnum(JoinMode, { each: true })
+  joinMode?: JoinMode;
 }

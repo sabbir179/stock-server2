@@ -28,8 +28,4 @@ export class CommentsService {
       { new: true },
     );
   }
-
-  findAll() {
-    return `This action returns all posts`;
-  }
 }

@@ -13,6 +13,9 @@ export class Subscription {
   @Prop({ required: true, type: Date })
   expiryDate: Date;
 
+  @Prop({ required: true })
+  planId: string;
+
   @Prop({
     enum: Object.values(SubscriptionType),
     default: SubscriptionType.FREE,

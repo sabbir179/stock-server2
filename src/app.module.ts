@@ -7,6 +7,7 @@ import { AuthModule } from './auth/auth.module';
 import { CommonModule } from './common/common.module';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule } from '@nestjs/config';
+import { ReferralsModule } from './referrals/referrals.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -18,6 +19,7 @@ import { ConfigModule } from '@nestjs/config';
     StocksModule,
     AuthModule,
     CommonModule,
+    ReferralsModule,
   ],
   controllers: [AppController],
   providers: [],
