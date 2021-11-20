@@ -20,3 +20,9 @@ export enum JoinMode {
   DIRECT = 'DIRECT',
   REFERRAL = 'REFERRAL',
 }
+
+export enum CreditCardType {
+  VISA = 'VISA',
+  MASTER = 'MASTER',
+  PAYPAL = 'PAYPAL',
+}
