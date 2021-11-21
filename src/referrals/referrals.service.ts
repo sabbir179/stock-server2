@@ -1,6 +1,7 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
+import { MailService } from '../mail/mail.service';
 import { CreateReferralDto } from './dto/create-referral.dto';
 import { UpdateReferralDto } from './dto/update-referral.dto';
 import { Referral, ReferralDocument } from './schemas/referral.schema';
@@ -9,6 +10,7 @@ import { Referral, ReferralDocument } from './schemas/referral.schema';
 export class ReferralsService {
   constructor(
     @InjectModel(Referral.name) private referralModel: Model<ReferralDocument>,
+    private readonly mailService: MailService,
   ) {}
 
   async create(uid: string, createReferralDto: CreateReferralDto) {
@@ -22,8 +24,8 @@ export class ReferralsService {
 
     const createdReferral = await this.referralModel.create(newReferral);
 
-    // TODO: send referral email here
-
+    const referralLink = `${process.env.CLIENT_BASE_URL}/auth/sign-up?referral=${createdReferral._id}`;
+    this.mailService.sendReferralEmail(referralLink, email);
     return {
       referralCode: createdReferral._id,
     };

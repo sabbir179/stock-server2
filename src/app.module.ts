@@ -24,7 +24,10 @@ import { FinanceModule } from './finance/finance.module';
     CommonModule,
     ReferralsModule,
     PaymentModule,
-    MailModule,
+    MailModule.forRoot({
+      apiKey: process.env.MAILGUN_API_KEY,
+      domain: process.env.MAILGUN_DOMAIN_NAME,
+    }),
     FinanceModule,
   ],
   controllers: [AppController],
