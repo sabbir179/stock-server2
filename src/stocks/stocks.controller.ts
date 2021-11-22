@@ -18,7 +18,16 @@ import { Roles } from '../common/decorators/roles.decorator';
 import { UserRole } from '../common/enum';
 import { StockQueryParamsDto } from './dto/stock-query-params.dto';
 import { IsUserActivated } from '../common/guards/activated-user.guard';
+import {
+  ApiBearerAuth,
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
+import { Stock } from './schemas/stock.schema';
 
+@ApiBearerAuth()
+@ApiTags('Stocks')
 @UseGuards(JwtAuthGuard, IsUserActivated, RolesGuard)
 @Controller('stocks')
 export class StocksController {
@@ -26,6 +35,12 @@ export class StocksController {
 
   @Post()
   @Roles(UserRole.ADMIN)
+  @ApiOperation({ summary: 'Create stock' })
+  @ApiResponse({
+    status: 201,
+    description: 'Return the created stock.',
+    type: Stock,
+  })
   create(@Body() createStockDto: CreateStockDto) {
     return this.stocksService.create(createStockDto);
   }
