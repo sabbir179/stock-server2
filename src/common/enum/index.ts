@@ -6,8 +6,12 @@ export enum UserRole {
 export enum SubscriptionType {
   GOLD = 'GOLD',
   PLATINUM = 'PLATINUM',
+}
+
+export enum PaymentStatus {
   FREE = 'FREE',
-  FREE_REFERRAL = 'FREE_REFERRAL',
+  PAID = 'PAID',
+  UNPAID = 'UNPAID',
 }
 
 export enum UserStatus {

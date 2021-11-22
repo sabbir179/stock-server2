@@ -6,6 +6,7 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { User, UserDocument } from './schemas/user.schema';
 import {
   JoinMode,
+  PaymentStatus,
   SubscriptionType,
   UserRole,
   UserStatus,
@@ -32,7 +33,8 @@ export class UsersService {
 
     const currentDate = new Date();
     const subscription = {
-      type: SubscriptionType.FREE,
+      type: SubscriptionType.GOLD,
+      paymentStatus: PaymentStatus.FREE,
       planId: 'free_123',
       expiryDate: new Date(currentDate.setMonth(currentDate.getMonth() + 1)),
     };

@@ -1,6 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Date, Document, ObjectId } from 'mongoose';
-import { SubscriptionType } from '../../common/enum';
+import { PaymentStatus, SubscriptionType } from '../../common/enum';
 import { Transform } from 'class-transformer';
 
 export type SubscriptionDocument = Subscription & Document;
@@ -18,9 +18,14 @@ export class Subscription {
 
   @Prop({
     enum: Object.values(SubscriptionType),
-    default: SubscriptionType.FREE,
+    default: SubscriptionType.GOLD,
   })
   type: SubscriptionType;
+  @Prop({
+    enum: Object.values(PaymentStatus),
+    default: PaymentStatus.FREE,
+  })
+  paymentStatus: PaymentStatus;
 }
 
 export const SubscriptionSchema = SchemaFactory.createForClass(Subscription);
