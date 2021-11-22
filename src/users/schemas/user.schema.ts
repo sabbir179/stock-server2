@@ -1,5 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, ObjectId } from 'mongoose';
+import * as mongoose from 'mongoose';
 import { JoinMode, UserRole, UserStatus } from '../../common/enum';
 import { Transform, Type } from 'class-transformer';
 import { SubscriptionSchema, Subscription } from './subscription.schema';
@@ -43,6 +44,13 @@ export class User {
     default: JoinMode.DIRECT,
   })
   joinMode: JoinMode;
+
+  @Prop({
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Referral',
+    default: null,
+  })
+  referral?: string;
 
   @Prop({ type: SubscriptionSchema })
   @Type(() => Subscription)

@@ -7,6 +7,10 @@ import { AuthModule } from './auth/auth.module';
 import { CommonModule } from './common/common.module';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule } from '@nestjs/config';
+import { ReferralsModule } from './referrals/referrals.module';
+import { PaymentModule } from './payment/payment.module';
+import { MailModule } from './mail/mail.module';
+import { FinanceModule } from './finance/finance.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -18,6 +22,13 @@ import { ConfigModule } from '@nestjs/config';
     StocksModule,
     AuthModule,
     CommonModule,
+    ReferralsModule,
+    PaymentModule,
+    MailModule.forRoot({
+      apiKey: process.env.MAILGUN_API_KEY,
+      domain: process.env.MAILGUN_DOMAIN_NAME,
+    }),
+    FinanceModule,
   ],
   controllers: [AppController],
   providers: [],

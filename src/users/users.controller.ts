@@ -18,7 +18,7 @@ import { UpdateStatusDto } from './dto/update-status.dto';
 import { Roles } from '../common/decorators/roles.decorator';
 import { UserRole } from '../common/enum';
 import { RolesGuard } from '../common/guards/roles.guard';
-import { UserQueryParamsDto } from './dto/query-parmas.dto';
+import { UserQueryParamsDto } from './dto/query-params.dto';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
 @ApiBearerAuth()

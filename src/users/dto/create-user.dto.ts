@@ -1,4 +1,14 @@
-import { IsEmail, IsPhoneNumber, IsString, MinLength } from 'class-validator';
+import { Type } from 'class-transformer';
+import {
+  IsEmail,
+  IsEnum,
+  IsOptional,
+  IsPhoneNumber,
+  IsString,
+  MinLength,
+} from 'class-validator';
+import { JoinMode } from '../../common/enum';
+import { CreditCard } from '../schemas/credit-card.schema';
 
 export class CreateUserDto {
   @IsEmail()
@@ -16,4 +26,16 @@ export class CreateUserDto {
 
   @IsString()
   lastName: string;
+
+  @IsOptional()
+  @IsString()
+  referral?: string;
+
+  @IsOptional()
+  @IsEnum(JoinMode, { each: true })
+  joinMode?: JoinMode;
+
+  @IsOptional()
+  @Type(() => CreditCard)
+  paymentCard?: CreditCard;
 }
